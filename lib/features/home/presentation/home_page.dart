@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:titiktemu_app/core/constants/app_colors.dart';
 import 'package:titiktemu_app/core/widgets/mood_selector.dart';
+import 'package:titiktemu_app/core/constants/app_affirmations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +12,40 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedMoodIndex = 4; // Default to "Neutral"
+
+  // --- CAROUSEL STATE VARIABLES ---
+  late PageController _pageController;
+  int _currentAffirmationIndex = 0;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _startAutoPlay();
+  }
+
+  @override
+  void dispose() {
+    // IMPORTANT: Always cancel the timer and dispose of the controller to prevent memory leaks
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  // --- TIMER LOGIC FOR 5-SECOND SLIDESHOW ---
+  void _startAutoPlay() {
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_pageController.hasClients) {
+        int nextPage = (_currentAffirmationIndex + 1) % _affirmations.length;
+        _pageController.animateToPage(
+          nextPage,
+          duration: const Duration(milliseconds: 600), // Smooth transition speed
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
 
   //Helper method for navigation placeholder
   void _navigateTo(String pageName) {
@@ -34,7 +69,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             _buildHeader(),
             SizedBox(height: 24),
-            _buildAffirmationCard(),
+            _buildAffirmationCarousel(),
             SizedBox(height: 16),
             _buildCarouselIndicator(),
             SizedBox(height: 32),
@@ -147,17 +182,109 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+
+
   // --- 3. CAROUSEL INDICATOR SECTION ---
-  Widget _buildCarouselIndicator() {
+
+Widget _buildAffirmationCarousel() {
+    return SizedBox(
+      height: 220, 
+      child: PageView.builder(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentAffirmationIndex = index;
+          });
+        },
+        // Pointing to the new file 
+        itemCount: AppAffirmations.dailyList.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: _buildSingleAffirmationCard(AppAffirmations.dailyList[index]),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSingleAffirmationCard(String text) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF174C5B),
+            AppColors.softMint,
+          ],
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: AppColors.softShadow,
+            blurRadius: 15,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 20,
+            left: 20,
+            child: Icon(
+              Icons.bedtime,
+              color: Colors.yellow.shade100,
+              size: 40,
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.darkText,
+                  height: 1.3,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+Widget _buildCarouselIndicators() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildDot(isActive: true),
-        _buildDot(isActive: false),
-        _buildDot(isActive: false),
-        _buildDot(isActive: false, isSmall: true),
-        _buildDot(isActive: false, isSmall: true),
-      ],
+      children: List.generate(
+        // Pointing to the new file here:
+        AppAffirmations.dailyList.length,
+        (index) => _buildDot(
+          isActive: index == _currentAffirmationIndex,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDot({required bool isActive}) {
+    // makes the dot transition smoothly
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      height: 8,
+      width: isActive ? 24 : 8, // Active dot becomes wider 
+      decoration: BoxDecoration(
+        color: isActive ? AppColors.darkTeal : AppColors.textDisabled.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(4), 
+      ),
     );
   }
 
