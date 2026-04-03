@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:titiktemu_app/features/journal/presentation/pages/journal_page.dart';
+import 'package:titiktemu_app/features/dashboard/presentation/pages/dashboard_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      home: JournalPage(),
+      home: DashboardPage(),
     );
   }
 }

@@ -24,58 +24,69 @@ class _MoodSelectorState extends State<MoodSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          "How are you feeling today?",
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.sectionBackground,
+        borderRadius: BorderRadius.circular(24),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.softMint, Color(0xFF174C5B)],
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            "How are you feeling today?",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildMoodIcon(
-              0,
-              Icons.sentiment_very_dissatisfied,
-              'Struggling',
-              AppColors.moodStruggling,
-            ),
-            _buildMoodIcon(
-              1,
-              Icons.sentiment_dissatisfied,
-              'Low',
-              AppColors.moodLow,
-            ),
-            _buildMoodIcon(
-              2,
-              Icons.sentiment_neutral,
-              'Neutral',
-              AppColors.moodNeutral,
-            ),
-            _buildMoodIcon(
-              3,
-              Icons.sentiment_satisfied,
-              'Calm',
-              AppColors.moodCalm,
-            ),
-            _buildMoodIcon(
-              4,
-              Icons.sentiment_very_satisfied,
-              'Good',
-              AppColors.moodGood,
-            ),
-          ],
-        ),
-      ],
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildMoodIcon(
+                0,
+                Icons.sentiment_very_dissatisfied,
+                'Struggling',
+                AppColors.moodStruggling,
+              ),
+              _buildMoodIcon(
+                1,
+                Icons.sentiment_dissatisfied,
+                'Low',
+                AppColors.moodLow,
+              ),
+              _buildMoodIcon(
+                2,
+                Icons.sentiment_neutral,
+                'Neutral',
+                AppColors.moodNeutral,
+              ),
+              _buildMoodIcon(
+                3,
+                Icons.sentiment_satisfied,
+                'Calm',
+                AppColors.moodCalm,
+              ),
+              _buildMoodIcon(
+                4,
+                Icons.sentiment_very_satisfied,
+                'Good',
+                AppColors.moodGood,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  //TODO: Fix the code below
   Widget _buildMoodIcon(
     int index,
     IconData iconData,

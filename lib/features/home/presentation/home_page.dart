@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:titiktemu_app/core/constants/app_colors.dart';
-import 'package:titiktemu_app/core/widgets/mood_selector.dart';
 import 'package:titiktemu_app/core/constants/app_affirmations.dart';
+import 'package:titiktemu_app/core/constants/app_colors.dart';
+import 'package:titiktemu_app/core/widgets/main_background.dart';
+import 'package:titiktemu_app/core/widgets/mood_selector.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,10 +40,13 @@ class _HomePageState extends State<HomePage> {
   void _startAutoPlay() {
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (_pageController.hasClients) {
-        int nextPage = (_currentAffirmationIndex + 1) % _affirmations.length;
+        int nextPage =
+            (_currentAffirmationIndex + 1) % AppAffirmations.dailyList.length;
         _pageController.animateToPage(
           nextPage,
-          duration: const Duration(milliseconds: 600), // Smooth transition speed
+          duration: const Duration(
+            milliseconds: 600,
+          ), // Smooth transition speed
           curve: Curves.easeInOut,
         );
       }
@@ -62,35 +68,37 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildHeader(),
-            SizedBox(height: 24),
-            _buildAffirmationCarousel(),
-            SizedBox(height: 16),
-            _buildCarouselIndicator(),
-            SizedBox(height: 32),
-            _buildQuickNavigation(),
-            SizedBox(height: 40),
+      backgroundColor: Colors.transparent,
+      body: MainBackground(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildHeader(),
+              SizedBox(height: 24),
+              _buildAffirmationCarousel(),
+              SizedBox(height: 16),
+              _buildCarouselIndicator(),
+              SizedBox(height: 32),
+              _buildQuickNavigation(),
+              SizedBox(height: 40),
 
-            //Reusable Mood Selector Widget
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: MoodSelector(
-                initialMoodIndex: _selectedMoodIndex,
-                onMoodSelected: (int selectedIndex) {
-                  setState(() {
-                    // Update selected mood index
-                    _selectedMoodIndex = selectedIndex;
-                  });
-                },
+              //Reusable Mood Selector Widget
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: MoodSelector(
+                  initialMoodIndex: _selectedMoodIndex,
+                  onMoodSelected: (int selectedIndex) {
+                    setState(() {
+                      // Update selected mood index
+                      _selectedMoodIndex = selectedIndex;
+                    });
+                  },
+                ),
               ),
-            ),
-            SizedBox(height: 40),
-          ],
+              SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
     );
@@ -131,64 +139,62 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // --- 2. AFFIRMATION CARD SECTION ---
-  Widget _buildAffirmationCard() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: Container(
-        height: 220,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.softTeal, AppColors.darkTeal],
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.softShadow,
-              blurRadius: 15,
-              offset: Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            //plkaceholder for image
-            Positioned(
-              top: 20,
-              left: 20,
-              child: Icon(Icons.bedtime, color: Colors.white, size: 40),
-            ),
-            Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30.0),
-                child: Text(
-                  "you are calm, \nsafe, and\ndeeply at peace.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.darkText,
-                    height: 1.3,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-
+  // // --- 2. AFFIRMATION CARD SECTION ---
+  // Widget _buildAffirmationCard() {
+  //   return Padding(
+  //     padding: EdgeInsets.symmetric(horizontal: 20.0),
+  //     child: Container(
+  //       height: 220,
+  //       width: double.infinity,
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(24),
+  //         gradient: LinearGradient(
+  //           begin: Alignment.topCenter,
+  //           end: Alignment.bottomCenter,
+  //           colors: [AppColors.softTeal, AppColors.darkTeal],
+  //         ),
+  //         boxShadow: [
+  //           BoxShadow(
+  //             color: AppColors.softShadow,
+  //             blurRadius: 15,
+  //             offset: Offset(0, 8),
+  //           ),
+  //         ],
+  //       ),
+  //       child: Stack(
+  //         children: [
+  //           //plkaceholder for image
+  //           Positioned(
+  //             top: 20,
+  //             left: 20,
+  //             child: Icon(Icons.bedtime, color: Colors.white, size: 40),
+  //           ),
+  //           Center(
+  //             child: Padding(
+  //               padding: EdgeInsets.symmetric(horizontal: 30.0),
+  //               child: Text(
+  //                 "you are calm, \nsafe, and\ndeeply at peace.",
+  //                 textAlign: TextAlign.center,
+  //                 style: TextStyle(
+  //                   fontSize: 24,
+  //                   fontWeight: FontWeight.w500,
+  //                   color: AppColors.darkText,
+  //                   height: 1.3,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // --- 3. CAROUSEL INDICATOR SECTION ---
 
-Widget _buildAffirmationCarousel() {
+  Widget _buildAffirmationCarousel() {
     return SizedBox(
-      height: 220, 
+      height: 220,
       child: PageView.builder(
         controller: _pageController,
         onPageChanged: (index) {
@@ -196,31 +202,30 @@ Widget _buildAffirmationCarousel() {
             _currentAffirmationIndex = index;
           });
         },
-        // Pointing to the new file 
+        // Pointing to the new file
         itemCount: AppAffirmations.dailyList.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: _buildSingleAffirmationCard(AppAffirmations.dailyList[index]),
+            child: _buildSingleAffirmationCard(
+              AppAffirmations.dailyList[index],
+            ),
           );
         },
       ),
     );
   }
 
-  Widget _buildSingleAffirmationCard(String text) {
+  Widget _buildSingleAffirmationCard(String imagePath) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF174C5B),
-            AppColors.softMint,
-          ],
-        ),
+        // gradient: const LinearGradient(
+        //   begin: Alignment.topCenter,
+        //   end: Alignment.bottomCenter,
+        //   colors: [Color(0xFF174C5B), AppColors.softMint],
+        // ),
         boxShadow: const [
           BoxShadow(
             color: AppColors.softShadow,
@@ -229,46 +234,15 @@ Widget _buildAffirmationCarousel() {
           ),
         ],
       ),
-      child: Stack(
-        children: [
-          Positioned(
-            top: 20,
-            left: 20,
-            child: Icon(
-              Icons.bedtime,
-              color: Colors.yellow.shade100,
-              size: 40,
-            ),
+      child: Container(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: Text(
-                text,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.darkText,
-                  height: 1.3,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-Widget _buildCarouselIndicators() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        // Pointing to the new file here:
-        AppAffirmations.dailyList.length,
-        (index) => _buildDot(
-          isActive: index == _currentAffirmationIndex,
         ),
       ),
     );
@@ -280,24 +254,23 @@ Widget _buildCarouselIndicators() {
       duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.symmetric(horizontal: 4),
       height: 8,
-      width: isActive ? 24 : 8, // Active dot becomes wider 
-      decoration: BoxDecoration(
-        color: isActive ? AppColors.darkTeal : AppColors.textDisabled.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(4), 
-      ),
-    );
-  }
-
-  Widget _buildDot({required bool isActive, bool isSmall = false}) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      height: isSmall ? 6 : 8,
-      width: isSmall ? 6 : 8,
+      width: isActive ? 24 : 8, // Active dot becomes wider
       decoration: BoxDecoration(
         color: isActive
             ? AppColors.darkTeal
             : AppColors.textDisabled.withOpacity(0.5),
-        shape: BoxShape.circle,
+        borderRadius: BorderRadius.circular(4),
+      ),
+    );
+  }
+
+  Widget _buildCarouselIndicator() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        // Pointing to the new file here:
+        AppAffirmations.dailyList.length,
+        (index) => _buildDot(isActive: index == _currentAffirmationIndex),
       ),
     );
   }
