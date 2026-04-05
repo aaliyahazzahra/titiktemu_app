@@ -1,8 +1,10 @@
 import 'package:crystal_navigation_bar/crystal_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:titiktemu_app/features/auth/presentation/pages/login_pages.dart';
 import 'package:titiktemu_app/features/home/presentation/home_page.dart';
 import 'package:titiktemu_app/features/journal/presentation/pages/journal_page.dart';
+import 'package:titiktemu_app/features/meditation/presentation/pages/breathing_page.dart';
 
 void main() => runApp(const MaterialApp(home: DashboardPage()));
 
@@ -15,7 +17,12 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   int _currentIndex = 0;
-  final List<Widget> _children = [const HomePage(), const JournalPage()];
+  final List<Widget> _children = [
+    const HomePage(),
+    const JournalPage(),
+    const BreathingPage(),
+    const LoginPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -54,18 +61,19 @@ class _DashboardPageState extends State<DashboardPage> {
               selectedColor: Colors.white,
             ),
 
-            /// Favourite
-            CrystalNavigationBarItem(
-              icon: IconlyBold.heart,
-              unselectedIcon: IconlyLight.heart,
-              selectedColor: Colors.red,
-            ),
-
             /// Add
             CrystalNavigationBarItem(
               icon: IconlyBold.plus,
               unselectedIcon: IconlyLight.plus,
               selectedColor: Colors.white,
+            ),
+
+            /// Breath
+            CrystalNavigationBarItem(
+              icon: IconlyBold.heart,
+              // icon: FontAwesomeIcons.brave,
+              unselectedIcon: IconlyLight.heart,
+              selectedColor: Colors.red,
             ),
 
             /// Search

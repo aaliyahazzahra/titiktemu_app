@@ -7,4 +7,8 @@ class AppAssets {
   static const String affirmation2 = '${_basePath}affirmation2.png';
   static const String affirmation3 = '${_basePath}affirmation3.png';
   static const String affirmation4 = '${_basePath}affirmation4.png';
+  static const String men = '${_basePath}men.png';
+  static const String women = '${_basePath}women.png';
+  static const String breatheIn = '${_basePath}breathe_in.png';
+  static const String breatheOut = '${_basePath}breathe_out.png';
 }

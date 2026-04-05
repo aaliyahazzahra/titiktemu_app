@@ -32,10 +32,11 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
+  font_awesome_flutter: ^11.0.0
   iconly: ^1.0.1
 
 dev_dependencies:
-  flutter_lints: ^5.0.0
+  flutter_lints: null
   flutter_test:
     sdk: flutter
 

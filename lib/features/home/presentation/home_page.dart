@@ -1,10 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:titiktemu_app/core/constants/app_affirmations.dart';
 import 'package:titiktemu_app/core/constants/app_colors.dart';
+import 'package:titiktemu_app/core/widgets/glass_container.dart';
 import 'package:titiktemu_app/core/widgets/main_background.dart';
 import 'package:titiktemu_app/core/widgets/mood_selector.dart';
+import 'package:titiktemu_app/core/widgets/quick_action_button.dart';
+import 'package:titiktemu_app/features/sessions/presentation/pages/session_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -54,50 +58,91 @@ class _HomePageState extends State<HomePage> {
   }
 
   //Helper method for navigation placeholder
-  void _navigateTo(String pageName) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Navigate to Journal Page'),
-        backgroundColor: AppColors.softTeal,
-        duration: Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
+  // void _navigateTo(String pageName) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(
+  //       content: Text('Navigate to Journal Page'),
+  //       backgroundColor: AppColors.softTeal,
+  //       duration: Duration(seconds: 2),
+  //       behavior: SnackBarBehavior.floating,
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: MainBackground(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _buildHeader(),
-              SizedBox(height: 24),
-              _buildAffirmationCarousel(),
-              SizedBox(height: 16),
-              _buildCarouselIndicator(),
-              SizedBox(height: 32),
-              _buildQuickNavigation(),
-              SizedBox(height: 40),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Spacer(),
+                    Text(
+                      'Titik Temu',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.softTeal,
+                      ),
+                    ),
+                  ],
+                ), // Placeholder for top row
+                SizedBox(height: 20),
+                _buildHeader(),
+                SizedBox(height: 24),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: AlignmentGeometry.centerLeft,
+                        child: Text(
+                          'How do you feel today?',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      MoodSelector(
+                        initialMoodIndex: _selectedMoodIndex,
+                        onMoodSelected: (int selectedIndex) {
+                          setState(() {
+                            _selectedMoodIndex = selectedIndex;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      _buildQuickNavigation(),
+                      SizedBox(height: 40),
 
-              //Reusable Mood Selector Widget
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: MoodSelector(
-                  initialMoodIndex: _selectedMoodIndex,
-                  onMoodSelected: (int selectedIndex) {
-                    setState(() {
-                      // Update selected mood index
-                      _selectedMoodIndex = selectedIndex;
-                    });
-                  },
+                      _buildAffirmationCarousel(),
+                      SizedBox(height: 16),
+                      _buildCarouselIndicator(),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 40),
-            ],
+                SizedBox(height: 32),
+              ],
+            ),
           ),
         ),
       ),
@@ -106,29 +151,16 @@ class _HomePageState extends State<HomePage> {
 
   // --- 1. HEADER SECTION ---
   Widget _buildHeader() {
-    return Container(
-      width: double.infinity,
-      height: 160,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.darkTeal, AppColors.softTeal],
-        ),
-
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
+    return GlassContainer(
       child: SafeArea(
+        top: true,
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
           child: const Text(
-            'Welcome back, Aaliyah',
+            'Good Morning, Aaliyah',
             style: TextStyle(
-              fontSize: 26,
+              fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Colors.white,
               letterSpacing: 0.5,
@@ -138,57 +170,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  // // --- 2. AFFIRMATION CARD SECTION ---
-  // Widget _buildAffirmationCard() {
-  //   return Padding(
-  //     padding: EdgeInsets.symmetric(horizontal: 20.0),
-  //     child: Container(
-  //       height: 220,
-  //       width: double.infinity,
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(24),
-  //         gradient: LinearGradient(
-  //           begin: Alignment.topCenter,
-  //           end: Alignment.bottomCenter,
-  //           colors: [AppColors.softTeal, AppColors.darkTeal],
-  //         ),
-  //         boxShadow: [
-  //           BoxShadow(
-  //             color: AppColors.softShadow,
-  //             blurRadius: 15,
-  //             offset: Offset(0, 8),
-  //           ),
-  //         ],
-  //       ),
-  //       child: Stack(
-  //         children: [
-  //           //plkaceholder for image
-  //           Positioned(
-  //             top: 20,
-  //             left: 20,
-  //             child: Icon(Icons.bedtime, color: Colors.white, size: 40),
-  //           ),
-  //           Center(
-  //             child: Padding(
-  //               padding: EdgeInsets.symmetric(horizontal: 30.0),
-  //               child: Text(
-  //                 "you are calm, \nsafe, and\ndeeply at peace.",
-  //                 textAlign: TextAlign.center,
-  //                 style: TextStyle(
-  //                   fontSize: 24,
-  //                   fontWeight: FontWeight.w500,
-  //                   color: AppColors.darkText,
-  //                   height: 1.3,
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 
   // --- 3. CAROUSEL INDICATOR SECTION ---
 
@@ -205,46 +186,65 @@ class _HomePageState extends State<HomePage> {
         // Pointing to the new file
         itemCount: AppAffirmations.dailyList.length,
         itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: _buildSingleAffirmationCard(
-              AppAffirmations.dailyList[index],
-            ),
-          );
+          return _buildSingleAffirmationCard(AppAffirmations.dailyList[index]);
         },
       ),
     );
   }
 
   Widget _buildSingleAffirmationCard(String imagePath) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        // gradient: const LinearGradient(
-        //   begin: Alignment.topCenter,
-        //   end: Alignment.bottomCenter,
-        //   colors: [Color(0xFF174C5B), AppColors.softMint],
-        // ),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.softShadow,
-            blurRadius: 15,
-            offset: Offset(0, 8),
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: AppColors.subtleBorder, width: 2),
+            boxShadow: const [
+              BoxShadow(
+                color: AppColors.softShadow,
+                blurRadius: 15,
+                offset: Offset(0, 8),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Container(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20.0),
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
+          child: Container(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
+            ),
           ),
         ),
-      ),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.transparent,
+                AppColors.darkBackground.withOpacity(0.2),
+              ],
+              stops: const [0.0, 1.0],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: AppColors.subtleBorder, width: 2),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -277,67 +277,56 @@ class _HomePageState extends State<HomePage> {
 
   // --- 4. QUICK NAVIGATION ---
   Widget _buildQuickNavigation() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'Quick Navigation',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          'Quick Navigation',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
           ),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildNavButton(Icons.headphones, 'Sessions'),
-              _buildNavButton(Icons.bedtime, 'Sleep'),
-              _buildNavButton(Icons.spa, 'Relax'),
-              _buildNavButton(Icons.menu_book, 'Learn'),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavButton(IconData icon, String label) {
-    return GestureDetector(
-      onTap: () => _navigateTo(label),
-      child: Container(
-        width: 75,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.subtleBorder, width: 1),
-          boxShadow: const [
-            BoxShadow(
-              color: AppColors.softShadow,
-              blurRadius: 10,
-              offset: Offset(0, 4),
-            ),
-          ],
         ),
-        child: Column(
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(icon, color: AppColors.softTeal, size: 32),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
-              ),
+            QuickActionButton(
+              icon: Icons.headphones,
+              label: 'Sessions',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SessionsPage()),
+                );
+              },
+            ),
+
+            QuickActionButton(
+              // icon: Icons.spa,
+              icon: IconlyBold.profile,
+              label: 'Relax',
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const SignPage()),
+                // );
+              },
+            ),
+            QuickActionButton(
+              icon: IconlyBold.bookmark,
+              label: 'Learn',
+              onTap: () {
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(builder: (context) => const LearnPage()),
+                // )
+              },
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:titiktemu_app/core/constants/app_colors.dart';
+
 import '../widgets/session_card.dart'; // Import the widget we just made
 
 class SessionsPage extends StatelessWidget {
-  const SessionsPage({Key? key}) : super(key: key);
+  const SessionsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Sessions')),
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Stack(
@@ -15,7 +17,6 @@ class SessionsPage extends StatelessWidget {
             // --- MAIN SCROLLABLE CONTENT ---
             Positioned.fill(
               child: SingleChildScrollView(
-              
                 padding: const EdgeInsets.only(
                   left: 20,
                   right: 20,
@@ -50,9 +51,7 @@ class SessionsPage extends StatelessWidget {
                       placeholderIcon:
                           Icons.wifi_tethering, // Spiral-like placeholder
                       gradientColors: [
-                        const Color(
-                          0xFF9FB6B5,
-                        ), 
+                        const Color(0xFF9FB6B5),
                         const Color(0xFFE8E2DD),
                       ],
                     ),
